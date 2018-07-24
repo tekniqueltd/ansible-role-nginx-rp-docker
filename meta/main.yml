@@ -1,0 +1,16 @@
+galaxy_info:
+  author: Teknique Devops Team
+  description: Ansible role that deploys nginx reverse proxy container using docker and docker-compose
+  company: Teknique Ltd
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: Debian
+      versions:
+        - stretch
+  galaxy_tags:
+    - docker
+    - compose
+    - install
+    - nginx-rp-docker
+dependencies: []

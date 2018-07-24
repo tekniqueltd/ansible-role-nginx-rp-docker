@@ -1,0 +1,12 @@
+---
+- name: restart nginx-rp
+  docker_service:
+    project_src: "/srv/nginx-rp/"
+    state: present
+    restarted: yes
+    services: nginx-rp
+  become_user: nginx-rp
+  become: yes
+  when: (start_nginx_rp is defined and not start_nginx_rp.changed)
+        or (start_nginx_rp is not defined)
+  tags: nginx-rp-docker

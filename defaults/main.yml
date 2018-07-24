@@ -1,0 +1,7 @@
+nginx_rp_docker_image_version: 1.15.0
+nginx_rp_docker_backends: [
+  "server1:8080",
+  "server2:8080"
+]
+nginx_rp_docker_ssl_key_path: "/srv/letsencrypt/live/example.com/privkey.pem"
+nginx_rp_docker_ssl_cert_path: "/srv/letsencrypt/live/example.com/fullchain.pem"

@@ -1,0 +1,16 @@
+version: '3'
+networks:
+  default:
+    driver: bridge
+
+services:
+  nginx-rp:
+    container_name: nginx-rp
+    restart: always
+    image: "nginx:{{ nginx_rp_docker_image_version }}"
+    volumes:
+      - /srv/nginx-rp/nginx.conf:/etc/nginx/conf.d/nginx-rp.conf
+      - "{{ nginx_rp_docker_ssl_key_path }}:/tls.key"
+      - "{{ nginx_rp_docker_ssl_cert_path }}:/tls.pem"
+    ports:
+      - 443:443

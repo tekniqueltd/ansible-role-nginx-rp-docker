@@ -1,0 +1,51 @@
+---
+- name: Create the nginx reverse proxy user
+  user:
+    name: nginx-rp
+    createhome: yes
+    home: /srv/nginx-rp
+    groups: "docker"
+    shell: /bin/bash
+  become: yes
+  tags: nginx-rp-docker
+
+- name: Template docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /srv/nginx-rp/docker-compose.yml
+  become_user: nginx-rp
+  become: yes
+  tags: nginx-rp-docker
+
+- name: Template nginx.conf
+  template:
+    src: nginx.conf.j2
+    dest: /srv/nginx-rp/nginx.conf
+  become_user: nginx-rp
+  become: yes
+  register: configure_nginx_rp
+  notify: restart nginx-rp
+  tags: nginx-rp-docker
+
+- name: Start nginx-rp
+  docker_service:
+    project_src: "/srv/nginx-rp/"
+    state: present
+    services: nginx-rp
+  register: start_nginx_rp
+  become_user: nginx-rp
+  become: yes
+  tags: nginx-rp-docker
+
+- meta: flush_handlers
+
+- name: Check nginx-rp container started
+  shell: >
+    docker ps -a -q -f name=^/nginx-rp$ -f status=running
+  register: check_nginx_rp_container_started
+  changed_when: False
+  failed_when: (check_nginx_rp_container_started|failed) or
+               (check_nginx_rp_container_started.stdout_lines|count != 1)
+  become_user: nginx-rp
+  become: yes
+  tags: nginx-rp-docker
